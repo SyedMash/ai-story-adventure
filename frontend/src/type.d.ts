@@ -10,8 +10,8 @@ type StoryData = {
   companion: string;
   budget: string;
   duration: string;
-  relationShipDynamics: string;
-  adventuresStyle: string;
-  tone: string;
-  conflict: string;
+  relationShipDynamics: string | null;
+  adventuresStyle: string | null;
+  tone: string | null;
+  conflict: string | null;
 };

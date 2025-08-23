@@ -26,6 +26,7 @@ import {
   travelingWith,
 } from "~/constants";
 import { Loader2 } from "lucide-react";
+import { saveStoryToDatabase } from "~/actions/story.action";
 
 const StoryForm = () => {
   const [travelWith, setTravelWith] = useState("");
@@ -63,11 +64,11 @@ const StoryForm = () => {
     try {
       setLoading(true);
 
-      const payload = {
+      const payload: StoryData = {
         country: data.country,
         city: data.city,
         companion: travelWith,
-        budget: travelWith,
+        budget: travelBudget,
         duration: data.duration,
         relationShipDynamics: relationshipDynamics,
         adventuresStyle: advStyle,
@@ -84,7 +85,7 @@ const StoryForm = () => {
       });
       if (!response.ok) throw new Error("something went wrong");
       const returnedData = (await response.json()) as ReturnedData;
-      // TODO: save the returned data into database and then push to continue story page
+      await saveStoryToDatabase(payload, returnedData);
     } catch (error) {
       console.log(error);
     } finally {
