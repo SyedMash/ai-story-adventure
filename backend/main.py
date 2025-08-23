@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-session = SQLiteSession("story-db")
+chat_history = []
 
 
 class StoryRequest(BaseModel):
@@ -119,7 +119,11 @@ async def start_story(request: StoryRequest):
         output_type=Adventure,
     )
 
-    result = await Runner.run(starting_agent=agent, input=request.city, session=session)
+    result = await Runner.run(starting_agent=agent, input=request.city)
+    chat_history.append({"role": "user", "content": request})
+    chat_history.append(chat_history)
+    chat_history.append({"role": "assistant", "content": result.final_output.dict()})
+    print(chat_history)
     return result.final_output.dict()
 
 
@@ -139,10 +143,11 @@ async def continue_story(request: ChoiceRequest):
         model=model,
         output_type=Adventure,
     )
-
+    chat_history.append({"role": "user", "content": choice})
     result = await Runner.run(
         starting_agent=agent,
-        input=f"Continue the story based on Option {choice}",
-        session=session,
+        input=f"{chat_history}\nContinue the story based on Option {choice}",
     )
+    chat_history.append({"role": "assistant", "content": result.final_output.dict()})
+    print(chat_history)
     return result.final_output.dict()
