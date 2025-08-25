@@ -34,6 +34,7 @@ class StoryRequest(BaseModel):
 
 
 class ChoiceRequest(BaseModel):
+    previous_history: list
     choice: str
 
 
@@ -41,6 +42,7 @@ class Adventure(BaseModel):
     intro_story: str
     option_a: str
     option_b: str
+    is_end: bool
 
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -135,19 +137,31 @@ async def continue_story(request: ChoiceRequest):
 
     agent = Agent(
         name="Story Agent",
-        instructions="Continue the story based on the user's previous choices. "
-        "Always follow the same structure:\n"
-        "Intro/Story: <story>\n"
-        "Option A: <choice A>\n"
-        "Option B: <choice B>",
+        instructions=(
+            "You are a travel story creator agent. "
+            "Continue the interactive travel adventure based on the user's previous choices.\n\n"
+            "⚡ Rules:\n"
+            "- Always provide a rich and immersive continuation of the story with vivid detail.\n"
+            "- The story should unfold gradually, across multiple steps, not end after just one or two choices.\n"
+            "- Do NOT set 'Is End: true' until the story has gone through at least 5–6 major decisions, unless the user explicitly asks to end it.\n"
+            "- If the story should continue, always provide exactly TWO new options labeled as:\n"
+            "   Option A: <choice A>\n"
+            "   Option B: <choice B>\n"
+            "- If the story is not finished, set 'Is End: false'.\n"
+            "- Only when the story reaches a satisfying, natural conclusion should you set 'Is End: true' and provide no new options.\n\n"
+            "Output format:\n"
+            "Intro/Story: <your story>\n"
+            "Option A: <choice A or null>\n"
+            "Option B: <choice B or null>\n"
+            "Is End: <true/false>\n"
+        ),
         model=model,
         output_type=Adventure,
     )
-    chat_history.append({"role": "user", "content": choice})
+
     result = await Runner.run(
         starting_agent=agent,
-        input=f"{chat_history}\nContinue the story based on Option {choice}",
+        input=f"{request.previous_history}\nContinue the story based on Option {choice}",
     )
     chat_history.append({"role": "assistant", "content": result.final_output.dict()})
-    print(chat_history)
     return result.final_output.dict()

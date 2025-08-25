@@ -48,3 +48,19 @@ export const saveStoryToDatabase = async (
     console.log(error);
   }
 };
+
+export const updateStoryEnd = async (id: string) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) redirect("/auth/sign-in");
+
+  await db.storyStep.update({
+    where: {
+      id: id,
+    },
+    data: {
+      isEnd: true,
+    },
+  });
+};

@@ -40,6 +40,8 @@ const StoryPage = async ({ params }: StoryPageProps) => {
           content={storyStep.content}
           optionA={storyStep.optionA}
           optionB={storyStep.optionB}
+          isEnd={storyStep.isEnd}
+          id={storyStep.id}
         />
       </div>
     </Bounded>

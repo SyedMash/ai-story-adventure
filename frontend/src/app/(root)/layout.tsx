@@ -26,7 +26,7 @@ export default function RootLayout({
         <Providers>
           <SidebarProvider>
             <AppSidebar />
-            <main className="h-full w-full bg-gradient-to-b from-white to-sky-100">
+            <main className="h-full w-full bg-gradient-to-b from-black/10 to-sky-200">
               <SidebarTrigger />
               {children}
             </main>
