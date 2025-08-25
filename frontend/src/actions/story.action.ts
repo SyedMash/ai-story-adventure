@@ -43,6 +43,17 @@ export const saveStoryToDatabase = async (
       },
     });
 
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        credits: {
+          decrement: 10,
+        },
+      },
+    });
+
     redirect(`/stories/${id}`);
   } catch (error) {
     console.log(error);

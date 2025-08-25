@@ -38,7 +38,7 @@ const StoriesCard = ({
 }: StoriesCardProps) => {
   return (
     <Link href={`/stories/${id}`}>
-      <Card className="cursor-pointer bg-transparent">
+      <Card className="relative cursor-pointer bg-transparent">
         <CardHeader>
           <CardTitle className="capitalize">{name}</CardTitle>
           <CardDescription>{country}</CardDescription>

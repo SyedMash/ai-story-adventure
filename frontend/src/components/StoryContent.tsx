@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "./ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader, Loader2 } from "lucide-react";
 import clsx from "clsx";
 import { updateStoryEnd } from "~/actions/story.action";
 
@@ -12,6 +12,7 @@ interface StoryContentProps {
   optionB: string | null;
   isEnd: boolean;
   id: string;
+  credits: number;
 }
 
 const StoryContent = ({
@@ -20,6 +21,7 @@ const StoryContent = ({
   optionB,
   isEnd,
   id,
+  credits,
 }: StoryContentProps) => {
   const [storyContent, setStoryContent] = useState(content);
   const [selectOption, setSelectOption] = useState<string | null>(null);
@@ -117,7 +119,7 @@ const StoryContent = ({
           </div>
         </>
       )}
-      {isStoryEnd ? (
+      {isStoryEnd && credits === 0 ? (
         <Button className="cursor-pointer" disabled>
           🔒 Play Again
           <span className="text-muted-foreground text-xs">

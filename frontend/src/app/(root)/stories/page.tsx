@@ -16,6 +16,13 @@ const StoriesPage = async () => {
     where: {
       userId: session.user.id,
     },
+    include: {
+      user: {
+        select: {
+          credits: true,
+        },
+      },
+    },
   });
 
   return (

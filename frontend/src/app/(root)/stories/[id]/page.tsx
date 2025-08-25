@@ -19,6 +19,11 @@ const StoryPage = async ({ params }: StoryPageProps) => {
         select: {
           name: true,
           country: true,
+          user: {
+            select: {
+              credits: true,
+            },
+          },
         },
       },
     },
@@ -42,6 +47,7 @@ const StoryPage = async ({ params }: StoryPageProps) => {
           optionB={storyStep.optionB}
           isEnd={storyStep.isEnd}
           id={storyStep.id}
+          credits={storyStep.story.user.credits}
         />
       </div>
     </Bounded>
